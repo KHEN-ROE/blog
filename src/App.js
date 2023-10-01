@@ -1,5 +1,4 @@
 import Modal from './Modal';
-
 import { useState } from 'react';
 import './App.css';
 
@@ -7,6 +6,8 @@ function App() {
 
   let [title, setTitle] = useState(['남자 코트 추천', '여자 코트 추천', '강남 맛집 추천']);
   let [like, setLike] = useState(0);
+  let [modal, setModal] = useState(false);
+  let [sendTitle, setSendTitle] = useState('');
 
   const addLike = () => {
     setLike(++like);
@@ -24,6 +25,11 @@ function App() {
     setTitle(copy);
   }
 
+  const showModal = (title) => {
+    setSendTitle(title);
+    setModal(!modal);
+  }
+
   return (
     <div className="App">
       <div className='black-nav'>
@@ -32,22 +38,22 @@ function App() {
       <div>
         <button onClick={sortTitle}>정렬</button>
       </div>
-      <div className='list'>
-        <h4>{title[0]} <span onClick={addLike}>👍</span> {like} 
-            <button onClick={changeTitle}>변경</button> </h4>
-        <p>2월 17일 발행</p>
-      </div>
-      <div className='list'>
-        <h4>{title[1]} <span onClick={addLike}>👍</span> {like} </h4>
+     
+      {
+        title.map(function (a, i) { // i는 1씩 증가하는 인덱스
+          return (
+            <div className='list'>
+              <h4> <span onClick={() => {showModal(title[i])}}>{title[i]}</span> <span onClick={addLike}>👍</span> {like} </h4>
+              <p>2월 17일 발행</p>
+            </div>
+          )
+        })
+      }
 
-        <p>2월 17일 발행</p>
-      </div>
-      <div className='list'>
-        <h4>{title[2]} <span onClick={addLike}>👍</span> {like} </h4>
-        <p>2월 17일 발행</p>
+      <div>
+        {modal ? <Modal sendTitle={sendTitle} color={'yellow'} changeTitle={changeTitle} /> : null}
       </div>
 
-      <Modal />
     </div>
   );
 }
